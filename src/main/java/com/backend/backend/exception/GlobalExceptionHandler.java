@@ -12,13 +12,19 @@ import org.springframework.web.context.request.WebRequest;
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(ResourceNotFoundException.class)
-    public ResponseEntity<CustomErrorResponse> globalExceptionHandler
-                   (Exception ex, WebRequest request) {
+    public ResponseEntity<CustomErrorResponse> handleResourceNotFoundException(
+            ResourceNotFoundException ex, WebRequest request) {
+
+        CustomErrorResponse errorResponse = buildErrorResponse(ex.getMessage(), HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
+    }
+
+    private CustomErrorResponse buildErrorResponse(String message, HttpStatus status) {
         CustomErrorResponse errors = new CustomErrorResponse();
         errors.setTimestamp(LocalDateTime.now());
-        errors.setError(ex.getMessage());
-        errors.setStatus(HttpStatus.NOT_FOUND.value());
-        return new ResponseEntity<>(errors, HttpStatus.NOT_FOUND);
+        errors.setError(message);
+        errors.setStatus(status.value());
+        return errors;
     }
 
 }
