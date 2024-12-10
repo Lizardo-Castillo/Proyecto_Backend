@@ -2,6 +2,7 @@ package com.backend.backend.exception;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import java.time.LocalDateTime;
 
@@ -54,5 +55,45 @@ public class CustomErrorResponseTest {
 
         assertEquals(error1, error2);
         assertEquals(error1.hashCode(), error2.hashCode());
+    }
+
+    @Test
+    void testEquals_SameObject() {
+        CustomErrorResponse response = new CustomErrorResponse();
+        assertThat(response.equals(response)).isTrue();
+    }
+
+    @Test
+    void testEquals_NullObject() {
+        CustomErrorResponse response = new CustomErrorResponse();
+        assertThat(response.equals(null)).isFalse();
+    }
+
+    @Test
+    void testEquals_DifferentClass() {
+        CustomErrorResponse response = new CustomErrorResponse();
+        assertThat(response.equals("Some String")).isFalse();
+    }
+
+    @Test
+    void testEquals_DifferentValues() {
+        CustomErrorResponse response1 = new CustomErrorResponse(LocalDateTime.now(), 404, "Not Found");
+        CustomErrorResponse response2 = new CustomErrorResponse(LocalDateTime.now(), 500, "Internal Server Error");
+        assertThat(response1.equals(response2)).isFalse();
+    }
+
+    @Test
+    void testEquals_SameValues() {
+        LocalDateTime now = LocalDateTime.now();
+        CustomErrorResponse response1 = new CustomErrorResponse(now, 404, "Not Found");
+        CustomErrorResponse response2 = new CustomErrorResponse(now, 404, "Not Found");
+        assertThat(response1.equals(response2)).isTrue();
+    }
+
+    @Test
+    void testEquals_DifferentTimestamp() {
+        CustomErrorResponse response1 = new CustomErrorResponse(LocalDateTime.now(), 404, "Not Found");
+        CustomErrorResponse response2 = new CustomErrorResponse(LocalDateTime.now().plusSeconds(1), 404, "Not Found");
+        assertThat(response1.equals(response2)).isFalse();
     }
 }
