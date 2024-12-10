@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -24,48 +25,39 @@ import com.backend.backend.repository.UserRepository;
 
 @CrossOrigin(origins = "*")
 @RestController
-@RequestMapping("/api/v1")
+@RequestMapping("/api/v1/users")
 public class UserController {
 
     @Autowired
     private UserRepository userRepository;
 
-    // get all users
-    @GetMapping("/users")
-    public List<User> getAllUsers() {
-        return userRepository.findAll();
+    // Obtener todos los usuarios
+    @GetMapping
+    public ResponseEntity<List<User>> getAllUsers() {
+        List<User> users = userRepository.findAll();
+        return ResponseEntity.ok(users);
     }
 
-    // create user rest API
-    @PostMapping("/users")
-    public User createUser(@RequestBody User user) {
-        return userRepository.save(user);
+    // Crear un nuevo usuario
+    @PostMapping
+    public ResponseEntity<User> createUser(@RequestBody User user) {
+        User savedUser = userRepository.save(user);
+        return ResponseEntity.status(HttpStatus.CREATED).body(savedUser);
     }
 
-    // get user by id rest api
-    @GetMapping("/users/{id}")
+    // Obtener usuario por ID
+    @GetMapping("/{id}")
     public ResponseEntity<User> getUserById(@PathVariable Long id) {
         User user = userRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException
-                      ("User not exist with id :" + id));
-        
-        // Construir respuesta personalizada
-        Map<String, Object> response = new HashMap<>();
-        response.put("id", user.getId());
-        response.put("firstName", user.getFirstName());
-        response.put("lastName", user.getLastName());
-        response.put("email", user.getEmailId());
-        
+                .orElseThrow(() -> new ResourceNotFoundException("User not exist with id: " + id));
         return ResponseEntity.ok(user);
     }
 
-    // update user rest api
-    @PutMapping("/users/{id}")
-    public ResponseEntity<User> updateUser(@PathVariable Long id,
-             @RequestBody User userDetails) {
+    // Actualizar usuario por ID
+    @PutMapping("/{id}")
+    public ResponseEntity<User> updateUser(@PathVariable Long id, @RequestBody User userDetails) {
         User user = userRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException
-                      ("User not exist with id :" + id));
+                .orElseThrow(() -> new ResourceNotFoundException("User not exist with id: " + id));
         user.setFirstName(userDetails.getFirstName());
         user.setLastName(userDetails.getLastName());
         user.setEmailId(userDetails.getEmailId());
@@ -73,23 +65,15 @@ public class UserController {
         return ResponseEntity.ok(updatedUser);
     }
 
-    // delete user rest api
-    @DeleteMapping("/users/{id}")
-    public ResponseEntity<Map<String, Boolean>> deleteUser
-               (@PathVariable Long id) {
+    // Eliminar usuario por ID
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Map<String, Boolean>> deleteUser(@PathVariable Long id) {
         User user = userRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException
-            ("User not exist with id :" + id));
+                .orElseThrow(() -> new ResourceNotFoundException("User not exist with id: " + id));
         userRepository.delete(user);
         Map<String, Boolean> response = new HashMap<>();
         response.put("deleted", Boolean.TRUE);
         return ResponseEntity.ok(response);
-    }
-
-    @GetMapping("/users/all")
-    public String testGetAllUsers() {
-        List<User> users = userRepository.findAll();
-        return "Número de usuarios encontrados: " + users.size();
     }
 
 }
