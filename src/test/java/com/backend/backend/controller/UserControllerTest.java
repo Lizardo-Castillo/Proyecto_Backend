@@ -23,15 +23,15 @@ import com.backend.backend.repository.UserRepository;
 import com.backend.backend.exception.ResourceNotFoundException;
 
 
-public class UserControllerTest {
- 
+class UserControllerTest {
+
     @InjectMocks
     private UserController userController;
 
     @Mock
     private UserRepository userRepository;
 
-    public UserControllerTest() {
+    UserControllerTest() {
         MockitoAnnotations.openMocks(this); // Inicializa los mocks
     }
 
@@ -45,7 +45,7 @@ public class UserControllerTest {
         ResponseEntity<List<User>> response = userController.getAllUsers();
 
         assertThat(response.getBody()).isNotEmpty();
-        assertThat(response.getBody().size()).isEqualTo(2);
+        assertThat(response.getBody()).hasSize(2);
         verify(userRepository, times(1)).findAll();
     }
 

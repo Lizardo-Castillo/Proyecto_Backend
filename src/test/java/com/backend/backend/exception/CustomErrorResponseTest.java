@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 
 import org.junit.jupiter.api.Test;
 
-public class CustomErrorResponseTest {
+class CustomErrorResponseTest {
     @Test
     void testDefaultConstructor() {
         CustomErrorResponse errorResponse = new CustomErrorResponse();
