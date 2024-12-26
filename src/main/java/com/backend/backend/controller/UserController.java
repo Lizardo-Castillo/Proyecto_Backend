@@ -22,7 +22,7 @@ import com.backend.backend.entity.User;
 
 import com.backend.backend.repository.UserRepository;
 
-@CrossOrigin(origins = "example.com")
+@CrossOrigin(origins = "http://localhost:4200")
 @RestController
 @RequestMapping("/api/v1/users")
 public class UserController {
@@ -31,6 +31,10 @@ public class UserController {
     private static final String USER_NOT_FOUND_MESSAGE = "User not exist with id: ";
 
     private UserRepository userRepository;
+
+    public UserController(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
 
     // Obtener todos los usuarios
     @GetMapping
