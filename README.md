@@ -40,10 +40,10 @@ La arquitectura del software está basada en un modelo cliente-servidor. El fron
 **Imágenes de las funcionalidades:**
 
 - Pantalla de Agregar Usuario:
-  ![Pantalla Agregar Usuario](ruta/a/tu/imagen/crear_usuario.png)
+  ![image](https://github.com/user-attachments/assets/15daa0f0-9124-4730-b511-453d755c5368)
 
 - Pantalla de Eliminar Usuario:
-  ![Pantalla Eliminar Usuario](ruta/a/tu/imagen/eliminar_usuario.png)
+  ![image](https://github.com/user-attachments/assets/d8dab184-eacc-4687-98f5-971e9968c8c1)
 
 ---
 
